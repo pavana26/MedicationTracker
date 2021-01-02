@@ -19,6 +19,12 @@ public class UserMedicineResponse {
 	private Date endDate;	
 	
 	private String instructions;
+	
+	private String dose;
+	
+	private String amount;
+	
+	private String frequency;
 
 	public Integer getUserMedicineId() {
 		return userMedicineId;
@@ -66,22 +72,51 @@ public class UserMedicineResponse {
 
 	public void setInstructions(String instructions) {
 		this.instructions = instructions;
+	} 
+	
+	public String getDose() {
+		return dose;
 	}
 
-	public UserMedicineResponse(Integer userId, String medicineName, Date startDate, Date endDate, String instructions) {
+	public void setDose(String dose) {
+		this.dose = dose;
+	}
+
+	public String getAmount() {
+		return amount;
+	}
+
+	public void setAmount(String amount) {
+		this.amount = amount;
+	}
+
+	public String getFrequency() {
+		return frequency;
+	}
+
+	public void setFrequency(String frequency) {
+		this.frequency = frequency;
+	}
+
+
+	public UserMedicineResponse(Integer userMedicineId, Integer userId, String medicineName, Date startDate,
+			Date endDate, String instructions, String dose, String amount, String frequency) {
 		super();
+		this.userMedicineId = userMedicineId;
 		this.userId = userId;
 		this.medicineName = medicineName;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.instructions = instructions;
+		this.dose = dose;
+		this.amount = amount;
+		this.frequency = frequency;
 	}
 
 	public UserMedicineResponse() {
 		super();
 	
 	}
-	
 	
 
 }

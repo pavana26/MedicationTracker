@@ -88,7 +88,7 @@ public class UserMedicineController {
 		Date start = searchRequest.getFromDate();
 		Date end = searchRequest.getToDate();
 		UserMedicineItem medItem = null;
-		while (start.before(end)) {
+		while (start.before(end) || start.equals(end)) {
 			medItem = new UserMedicineItem();
 			medItem.setDateOfWeek(DateUtil.getDateToString(start));
 			List<MedicineDetail> medDetail = new ArrayList<>();
@@ -131,6 +131,9 @@ public class UserMedicineController {
 		userMedicine.setStartDate(userMedicineReq.getFromDate());
 		userMedicine.setEndDate(userMedicineReq.getToDate());
 		userMedicine.setUserId(Integer.parseInt(userId));
+		userMedicine.setAmount(userMedicineReq.getAmount());
+		userMedicine.setDose(userMedicineReq.getDose());
+		userMedicine.setFrequency(userMedicineReq.getFrequency());
 		return userMedicineRepository.save(userMedicine);
 
 	}
@@ -169,6 +172,9 @@ public class UserMedicineController {
 		userMedicine.setInstructions(userMedicineReq.getInstructions());
 		userMedicine.setStartDate(userMedicineReq.getFromDate());
 		userMedicine.setEndDate(userMedicineReq.getToDate());
+		userMedicine.setAmount(userMedicineReq.getAmount());
+		userMedicine.setDose(userMedicineReq.getDose());
+		userMedicine.setFrequency(userMedicineReq.getFrequency());
 		UserMedicine updatedUserMedicine = userMedicineRepository.save(userMedicine);
 		return ResponseEntity.ok(updatedUserMedicine);
 	}
