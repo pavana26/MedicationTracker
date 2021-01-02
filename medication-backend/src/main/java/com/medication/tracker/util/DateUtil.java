@@ -29,4 +29,24 @@ public class  DateUtil {
 		String strOutput = sdfmt.format(dt);
 		return strOutput;
 	}
+	
+	public static Date getDateWithoutTimeUsingCalendar(Date dt) {
+	    Calendar calendar = Calendar.getInstance();
+	    calendar.setTime(dt);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR, 0);
+	    return calendar.getTime();
+	}
+	
+	public static Date getDateWithEndTimeUsingCalendar(Date dt) {
+	    Calendar calendar = Calendar.getInstance();
+	    calendar.setTime(dt);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.HOUR, 23);
+	    return calendar.getTime();
+	}
 }

@@ -2,7 +2,8 @@ package com.medication.tracker.controller;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;import java.util.Date;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,8 +38,6 @@ import com.medication.tracker.response.UserMedicineResponse;
 import com.medication.tracker.response.UserMedicineSearchResponse;
 import com.medication.tracker.util.DateUtil;
 
-
-
 /*
  * Author :Pavana
  * Version :1
@@ -64,7 +63,7 @@ public class UserMedicineController {
 	@PostMapping("/medicines/addmedicine")
 	public Medicine addMedicine(@RequestBody MedicineRequest medicine) {
 		Medicine medicineObj = medicineRepository.getByName(medicine.getMedicineName());
-		if(null != medicineObj) {
+		if (null != medicineObj) {
 			throw new CustomException("Name already exists");
 		}
 		medicineObj = new Medicine();
@@ -94,7 +93,8 @@ public class UserMedicineController {
 			List<MedicineDetail> medDetail = new ArrayList<>();
 			for (UserMedicine med : dbList) {
 				MedicineDetail mdetail = null;
-				if (med.getStartDate().before(start) && med.getEndDate().after(start)) {
+				if ((med.getStartDate().before(start) || med.getStartDate().equals(start)) && 
+						(med.getEndDate().after(start) || med.getEndDate().equals(start))) {
 					mdetail = new MedicineDetail();
 					mdetail.setUsermedicineId(med.getUserMedicineId());
 					mdetail.setAmount(med.getAmount());
@@ -119,17 +119,16 @@ public class UserMedicineController {
 		return response;
 	}
 
-
-
 	/* Add user medicines */
 	@PostMapping("/medicines/UserMedicine")
-	public UserMedicine addUserMedicine(@RequestHeader("userId") String userId,@RequestBody UserMedicineRequest userMedicineReq) {
+	public UserMedicine addUserMedicine(@RequestHeader("userId") String userId,
+			@RequestBody UserMedicineRequest userMedicineReq) {
 
 		UserMedicine userMedicine = new UserMedicine();
 		userMedicine.setMedicineName(userMedicineReq.getMedicineName());
 		userMedicine.setInstructions(userMedicineReq.getInstructions());
-		userMedicine.setStartDate(userMedicineReq.getFromDate());
-		userMedicine.setEndDate(userMedicineReq.getToDate());
+		userMedicine.setStartDate(DateUtil.getDateWithoutTimeUsingCalendar(userMedicineReq.getFromDate()));
+		userMedicine.setEndDate(DateUtil.getDateWithEndTimeUsingCalendar(userMedicineReq.getToDate()));
 		userMedicine.setUserId(Integer.parseInt(userId));
 		userMedicine.setAmount(userMedicineReq.getAmount());
 		userMedicine.setDose(userMedicineReq.getDose());
@@ -163,8 +162,8 @@ public class UserMedicineController {
 
 	/* Update UserMedicine */
 	@PutMapping("/medicines/UserMedicine/{userMedicineId}")
-	public ResponseEntity<UserMedicine> updateUserMedicine(@RequestHeader("userId") String userId,@PathVariable Integer userMedicineId,
-			@RequestBody UserMedicineRequest userMedicineReq) {
+	public ResponseEntity<UserMedicine> updateUserMedicine(@RequestHeader("userId") String userId,
+			@PathVariable Integer userMedicineId, @RequestBody UserMedicineRequest userMedicineReq) {
 
 		UserMedicine userMedicine = userMedicineRepository.findById(userMedicineId)
 				.orElseThrow(() -> new CustomException("Medicine Details Not Found for this Id"));
